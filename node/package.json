@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "pg": "latest",
-    "prompt": "latest"
-  }
-}
