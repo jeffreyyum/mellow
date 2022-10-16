@@ -16,21 +16,13 @@ def exec_statement(conn, stmt):
     except ProgrammingError:
         return
 
+conn = psycopg2.connect(os.environ["DATABASE_URL"])
 
-def main():
-
-    # Connect to CockroachDB
-    connection = psycopg2.connect(os.environ["DATABASE_URL"], application_name="$ docs_quickstart_python")
-
-    statements = [
-        #can set up tables from scratch here
-    ]
-
-    for statement in statements:
-        exec_statement(connection, statement)
-
-    # Close communication with the database
-    connection.close()
+with conn.cursor() as cur:
+    cur.execute("SELECT * FROM disorders")
+    res = cur.fetchall()
+    conn.commit()
+    print(res)
 
 app = Flask(__name__)
 
@@ -109,8 +101,5 @@ def create_specialist():
 
     except Exception as e:
         return jsonify({"error": str(e)})
-
-if __name__ == "__main__":
-    main()
 
 app.run(host="0.0.0.0", debug=True)
